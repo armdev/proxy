@@ -1,0 +1,26 @@
+version: '3'
+services:
+  haproxy:
+    image: haproxy:latest
+    container_name: haproxy
+    ports:
+      - "80:80"
+      - "8404:8404"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
+    depends_on:
+      - nginx
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./html:/usr/share/nginx/html
+    environment:
+      - REAL_IP_HEADER=X-Real-IP      
+
+
